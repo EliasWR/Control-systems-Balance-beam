@@ -1,0 +1,50 @@
+% Author - Jon Arnt Kårstad, NTNU IMT
+\documentclass{article}
+
+% Importing document settings from our file "packages.sty"
+\usepackage{packages}
+
+% Beginning of document
+\begin{document}
+
+% Inserting title page
+\import{./}{title}
+
+%Inserting summary page
+\import{./Sections/}{Summary}
+\newpage
+
+% Defining front matter settings (Norsk: innstillinger for forord m.m.)
+\frontmatter
+
+% Inserting table of contents
+\tableofcontents
+\newpage
+
+\mainmatter
+
+\import{./Sections/}{Description}
+\newpage
+
+\import{./Sections/}{Theory}
+\newpage
+
+\import{./Sections/}{Method}
+\newpage
+
+\import{./Sections/}{Results}
+\newpage
+
+\import{./Sections/}{Discussion}
+\newpage
+
+\nocite{Kalman-library}
+\nocite{Median-library}
+\printbibliography[heading = bibintoc, title = References] 
+\newpage
+
+\import{./Sections/}{Appendix}
+\newpage
+
+% End of document
+\end{document}
