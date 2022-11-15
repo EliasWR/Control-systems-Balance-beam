@@ -1,13 +1,13 @@
 \section{Theory}
 
 \subsection{PID}
-A common controller used in control systems is the PID-controller \cite{wiki-pid}. This consists of three parts, the proportional (P), integral (I) and derivative (D). All three are based on the error, $e$, which is usually the $setpoint - process value$.\
+A common controller used in control systems is the PID-controller \cite{wiki-pid}. This consists of three parts, the proportional (P), integral (I) and derivative (D). All three are based on the error, $e$, which is usually calculated by $setpoint - process value$.\
 The proportional part is the easiest. As the name suggest, the proportional part is proportional to the error, with a gain of $K_p$
 \begin{equation}
     \label{eq:P-part}
     P = K_p \cdot e
 \end{equation}
-A problem with only using a P-controller what is called the steady-state error. By the formula \ref{eq:P-part}, one can see that if $e = 0$, the output will be zero, and the error will increase again. This may settle down to one stable error, known as the steady-state error, or even just oscillate.
+A problem with only using a P-controller is the steady-state error. By the formula \ref{eq:P-part}, one can see that if $e = 0$, the output will be zero, and the error will increase again. This may settle down to one stable error, known as the steady-state error, or even just oscillate.
 To fix the problem of steady-state error, we can introduce the integral part. As the name suggest, this sums up the error over time and, with its own gain $K_i$, adds to the output as time goes on. The formula for the I-part is:
 \begin{equation}
     \label{eq:I-part}
@@ -19,34 +19,38 @@ Most times a PI-controller is enough to create a good controller, but on faster 
     \label{eq:D-part}
     D = K_d \cdot \frac{de}{dt}
 \end{equation}
-A rapid change in the error will lead to a high output from the D-part to counteract the change. This can result in faster response by the controller. But the D-part will also react to noise in the process value, making the system unstable and therefore doing more greater than good.
+A rapid change in the error will lead to a high output from the D-part to counteract the change. This can result in faster response by the controller. But the D-part will also react to noise in the process value, making the system unstable.
 
-All of these equations \ref{eq:P-part}, \ref{eq:I-part}, \ref{eq:D-part} summed up leads to the general formula for a PID-controller
-\begin{equation}
+All of these equations \ref{eq:P-part}, \ref{eq:I-part}, \ref{eq:D-part} summed up leads to the general formula for a PID-controller in the time-domain. Using laplace-transformation, one can obtain the transfer function in the s-domain.
+\begin{align}
     \label{eq:PID}
-    U = K_p \cdot e + K_i \cdot \int_{0}^{t} e\,dt + K_d \cdot \frac{d}{dt} e
-\end{equation}
+    u(t) &= K_p \cdot e + K_i \cdot \int_{0}^{t} e\,dt + K_d \cdot \frac{d}{dt} e\\
+    U(s) &= K_p+\frac{K_i}{s}+K_ds
+\end{align}
 
 
 \subsection{Kalman-filter}
-The kalman filter is a complex filter which we will not describe fully here. The kalman filter uses estimation to determine its output values by using historical data of the signal together with statistical noise and inaccuracies. 
+The kalman filter is a complex filter which we will not describe in depth here. The kalman filter uses estimation to determine its output values by using historical data of the signal together with statistical noise and inaccuracies. 
 \cite{Kalman-filter}
 
 
 \subsection{Median-filter}
 A median filter is a simple, yet somewhat effective filter to reduce spikes \cite{Median-library}. The median filter takes in a given number of samples and returns the median of those values. The median is the middle number in a sorted sequence of numbers. Not to be confused with a average filter, which takes the average of all the samples.
-A representation is:
-\begin{equation}
-    \label{eq:median}
-    \textrm{Median} = \textrm{list\_of\_samples} [\frac{n+1}{2}]
-\end{equation}
-where list\_of\_samples are a sorted list of $n$ number of samples and $n$ is odd.
+A representation is:\\
+
+
+\begin{align*}
+    \text{Median\textsubscript{odd}} &= \text{list\_of\_samples} \left[ \frac{n+1}{2} \right]\\
+    \text{Median\textsubscript{even}} &= \frac{\text{list\_of\_samples} \left[ \frac{n}{2} \right] + \text{list\_of\_samples} \left[ \frac{n}{2} + 1 \right]}{2} 
+\end{align*}
+
+where list\_of\_samples is a sorted list of $n$ number of samples. $\frac{n+1}{2}$, $\frac{n}{2} + 1$ and $\frac{n}{2}$ are index of a number in the sorted list.
 
 
 \subsection{Distance measurement}
-The sharp distance sensor uses infrared lighting to measure the distance to the object \cite{Sharp-datasheet}. The distance output is a non-linear analog voltage that is measured by the Arduino. A general linearization for the Sharp 2y0a21 is:
+The sharp distance sensor uses infrared lighting to measure the distance to the object \cite{Sharp-datasheet}. Because of limitations on the sensor, the distance can't be outside the range of 10-80cm. The distance output is a non-linear analog voltage that is measured by the Arduino. A general linearization for the Sharp 2y0a21 is given by:
 \begin{equation}
-    \label{sharp-linear}
-    \textrm{distance} = 29.998 \cdot {V_o}^{-1.173}
+    \label{eq:sharp-linear}
+    \textrm{distance in cm} = 29.998 \cdot {V_o}^{-1.173}
 \end{equation}
-Small variations in temperature, pressure and uncertainty in components can occur and it is recommended to do a manual calibration of the constants in the formula.
+Small variations in temperature, pressure and uncertainty in components can occur and it is recommended to do a manual calibration of the constants in the formula \cite{Sharp-datasheet}.

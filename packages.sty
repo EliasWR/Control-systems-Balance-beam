@@ -20,21 +20,23 @@
 % -----------------------
 
 % --- Appendices ---
-\usepackage{appendix}
+%\usepackage{appendix}[toc,page]
+
+
 \newcommand{\addappendix}{   % Self-created command to insert appendix with predefined settings
     \newpage
     \appendix
     \section*{Appendix}   % Name of appendix
-    \addcontentsline{toc}{section}{Vedlegg}  % Add appendix name to table of contents
+    \addcontentsline{toc}{section}{Appendix}  % Add appendix name to table of contents
     \renewcommand{\thesubsection}{\Alph{subsection}}    % Change numbering of section to upper-case letters.
 }
 
 % --- Bibliography & References---  
-\usepackage[backend = biber,    % Recommended backend for sorting bibliography
+\usepackage{biblatex} [backend = biber,    % Recommended backend for sorting bibliography
             style = authoryear-icomp,    % Close to the 'Harvard' referencing style
             urldate = long,     % Long: 24th Mar. 1997 | Short: 24/03/1997
             maxcitenames = 2,   % Number of authors in cite before replaced with 'Author#1 et al.'
-            ]{biblatex}
+            ]
 \addbibresource{references.bib}     % Adding our file containing the references
 % \addbibresource{reference_2.bib} is possible if we want to add several reference files
 
@@ -71,6 +73,7 @@
 \usepackage{enumitem}   % Labeling of list items
 \usepackage{multicol}   % Split up a section in multiple columns
 \usepackage{multirow}
+%\usepackage{fixltx2e}   % Subscript
 %\usepackage{showframe}  % Show frame around all document areas
 
 % --- Image ---

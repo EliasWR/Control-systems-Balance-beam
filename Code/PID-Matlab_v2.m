@@ -1,6 +1,8 @@
-% Define system constants m, g, d, L, J, R
+% Define laplace-variable
+syms('s')
 
-s = tf ('s')
+
+% Define system constants m, g, d, L, J, R
 
 m = 0.0027; % mass [kg]
 g = 9.81;   % gravity [m/s^2]
@@ -11,31 +13,30 @@ J = 0.00072;% Moment of inertia of the ball [kg*m^2]
 
 
 % Define PID-gain constants
-
 Kp = 6;
 Ki = 0.15;
 Kd = 5000;
 
-% Transfer function of the system
 
-H = (m*g*(Rs/L))/((J/(Rb^2)+m)*s^2);
+% Transfer function of the system
+num = [m*g*(Rs/L)];
+den = [(J/(Rb^2)+m) 0 0];
+H = tf(num, den);
 
 
 % Transfer function of the controller 
-
 G = pid(Kp, Ki, Kd);
 
 
-% Transfer function system
+% Open loop transfer function
+sys = H*G;
 
-sys = (G*H) / (1+G*H);
+
+% Closed loop transfer function
+sys_CL = feedback(sys, 1);
 
 
 % Outputs
-
-M = feedback(sys, 0)
-bode(sys)
-step (M,10)
-rlocus (sys)
-step (sys)
-tf (sys)
+tf(sys_CL)
+pole(sys_CL)
+step(sys_CL);
